@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using Microsoft.Unity.VisualStudio.Editor;
+using PackageInfo = UnityEditor.PackageManager.PackageInfo;
 
 namespace UnityZed
 {
@@ -18,7 +19,14 @@ namespace UnityZed
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
 
+            var version = "unknown";
+            var displayName = "Unity Zed";
             var package = UnityEditor.PackageManager.PackageInfo.FindForAssembly(GetType().Assembly);
+            if (package != null)
+            {
+                version = package.version;
+                displayName = package.displayName;
+            }
 
             var style = new GUIStyle
             {
@@ -26,7 +34,7 @@ namespace UnityZed
                 margin = new RectOffset(0, 4, 0, 0)
             };
 
-            GUILayout.Label($"<size=10><color=grey>{package.displayName} v{package.version} enabled</color></size>", style);
+            GUILayout.Label($"<size=10><color=grey>{displayName} v{version} enabled</color></size>", style);
             GUILayout.EndHorizontal();
 
             EditorGUILayout.LabelField("Generate .csproj files for:");

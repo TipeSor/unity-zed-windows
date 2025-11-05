@@ -21,7 +21,7 @@ namespace UnityZed
                 // [Linux] (Flatpak)
                 ("/var/lib/flatpak/app/dev.zed.Zed/current/active/files/bin/zed", null),
 
-                // [Linux] (Repo) 
+                // [Linux] (Repo)
                 ("/usr/bin/zeditor", null),
 
                 // [Linux] (NixOS)
@@ -34,6 +34,41 @@ namespace UnityZed
                 // [Linux] (Official Website)
                 (NPath.HomeDirectory.Combine(".local/bin/zed"), null),
             };
+
+#if UNITY_EDITOR_WIN
+            // [Windows] Default install locations
+            var programFiles = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFiles);
+            var programFilesX86 = Environment.GetFolderPath(Environment.SpecialFolder.ProgramFilesX86);
+            var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            var windowsCandidates = new[]
+            {
+                Path.Combine(programFiles, "Zed", "zed.exe"),
+                Path.Combine(programFilesX86, "Zed", "zed.exe"),
+                Path.Combine(localAppData, "Programs", "Zed", "zed.exe"), // common for user-level installs
+                Path.Combine(localAppData, "Zed", "zed.exe")
+            };
+
+            foreach (var winPath in windowsCandidates)
+            {
+                candidates.Add((winPath, null));
+            }
+
+            // [Windows] Check if 'zed.exe' is in PATH
+            var pathEnv = Environment.GetEnvironmentVariable("PATH");
+            if (!string.IsNullOrEmpty(pathEnv))
+            {
+                var pathDirs = pathEnv.Split(Path.PathSeparator);
+                foreach (var dir in pathDirs)
+                {
+                    var exePath = Path.Combine(dir.Trim(), "zed.exe");
+                    if (File.Exists(exePath))
+                    {
+                        candidates.Add((exePath, null));
+                    }
+                }
+            }
+#endif
 
             foreach (var candidate in candidates)
             {
