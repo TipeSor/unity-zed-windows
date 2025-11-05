@@ -1,5 +1,7 @@
+using System;
 using Unity.CodeEditor;
 using System.Collections.Generic;
+using System.IO;
 using System.Xml.XPath;
 using System.Text;
 using NiceIO;
@@ -12,7 +14,7 @@ namespace UnityZed
         {
             var results = new List<CodeEditor.Installation>();
 
-            var candidates = new (NPath path, TryGetVersion tryGetVersion)[] {
+            var candidates = new List<(NPath path, TryGetVersion tryGetVersion)> {
 
                 // [MacOS]
                 ("/Applications/Zed.app/Contents/MacOS/cli", TryGetVersionFromPlist),
