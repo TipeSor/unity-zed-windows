@@ -28,6 +28,9 @@ namespace UnityZed
             // if file path is provided, add it too
             if (!string.IsNullOrEmpty(filePath))
             {
+                if (OperatingSystem.IsWindows)
+                    args.Append(" && \"{m_ProjectPath}\"");
+
                 args.Append(" -a ");
                 args.Append($"\"{filePath}\"");
 
