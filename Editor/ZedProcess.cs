@@ -29,7 +29,7 @@ namespace UnityZed
             if (!string.IsNullOrEmpty(filePath))
             {
                 if (OperatingSystem.IsWindows)
-                    args.Append(" && \"{m_ProjectPath}\"");
+                    args.Append($" && \"{m_ProjectPath}\"");
 
                 args.Append(" -a ");
                 args.Append($"\"{filePath}\"");
