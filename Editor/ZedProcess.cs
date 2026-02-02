@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics.Eventing.Reader;
 using System.Text;
 using NiceIO;
 using Unity.CodeEditor;
@@ -26,12 +27,15 @@ namespace UnityZed
             // always add project path
             var args = new StringBuilder($"\"{m_ProjectPath}\"");
 
+
+            if (Application.platform == RuntimePlatform.WindowsEditor)
+            {
+                return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
+            }
+
             // if file path is provided, add it too
             if (!string.IsNullOrEmpty(filePath))
             {
-                if (Application.platform == RuntimePlatform.WindowsEditor)
-                    args.Append($" && \"{m_ExecPath}\"");
-
                 args.Append(" -a ");
                 args.Append($"\"{filePath}\"");
 
@@ -48,7 +52,6 @@ namespace UnityZed
                 }
             }
 
-            sLogger.Log($"{m_ExecPath} {args}");
             return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
         }
     }
