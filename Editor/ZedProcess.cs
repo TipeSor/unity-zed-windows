@@ -51,7 +51,7 @@ namespace UnityZed
             {
                 return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
             }
-            catch (Exeption ex)
+            catch (Exception ex)
             {
                 sLogger.Log(ex);
             }
