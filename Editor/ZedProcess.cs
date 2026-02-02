@@ -8,7 +8,7 @@ namespace UnityZed
 {
     public class ZedProcess
     {
-        private static readonly ILogger sLogger = ZedLogger.Create();
+        private static readonly ILogger sLogger = ZedLogger.Create("log");
 
         private readonly NPath m_ExecPath;
         private readonly NPath m_ProjectPath;
@@ -29,8 +29,8 @@ namespace UnityZed
             // if file path is provided, add it too
             if (!string.IsNullOrEmpty(filePath))
             {
-                if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor)
-                    args.Append($" && \"{m_ProjectPath}\"");
+                if (Application.platform == RuntimePlatform.WindowsEditor)
+                    args.Append($" && \"{m_ExecPath}\"");
 
                 args.Append(" -a ");
                 args.Append($"\"{filePath}\"");
@@ -48,15 +48,8 @@ namespace UnityZed
                 }
             }
 
-            try
-            {
-                return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
-            }
-            catch (Exception ex)
-            {
-                sLogger.Log(ex);
-            }
-            return false;
+            sLogger.Log($"{m_ExecPath} {args}");
+            return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
         }
     }
 }
