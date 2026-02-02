@@ -28,7 +28,7 @@ namespace UnityZed
             // if file path is provided, add it too
             if (!string.IsNullOrEmpty(filePath))
             {
-                if (OperatingSystem.IsWindows)
+                if (UnityEngine.Application.platform == UnityEngine.RuntimePlatform.WindowsEditor)
                     args.Append($" && \"{m_ProjectPath}\"");
 
                 args.Append(" -a ");
@@ -47,7 +47,15 @@ namespace UnityZed
                 }
             }
 
-            return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
+            try
+            {
+                return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
+            }
+            catch (Exeption ex)
+            {
+                sLogger.Log(ex);
+            }
+            return false;
         }
     }
 }
