@@ -27,9 +27,13 @@ namespace UnityZed
             // always add project path
             var args = new StringBuilder($"\"{m_ProjectPath}\"");
 
-
             if (Application.platform == RuntimePlatform.WindowsEditor)
             {
+                // if file path is provided, add it too
+                if (!string.IsNullOrEmpty(filePath))
+                {
+                    args.Append($" \"{filePath}\"");
+                }
                 return CodeEditor.OSOpenFile(m_ExecPath.ToString(), args.ToString());
             }
 
